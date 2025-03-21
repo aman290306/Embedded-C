@@ -15,4 +15,4 @@ while(1){
   }
   }
 }
-//Output: all 8LEDS should blink 10times
+//Output: all 8 LEDS should blink 10times
