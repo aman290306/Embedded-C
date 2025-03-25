@@ -3,7 +3,7 @@ unsigned int i,sw2,j;
 //sw2 1 if not pressed, 0 if pressed
 //Assume that the LED unit is connected to the port pins P0.4 to P0.11 and SW2 is connected  to P1.26
 //pattern should be repeated as long as switch is pressed. if not pressed turn off all leds.
-void read_sw2(){
+void read_sw2(){ 
    sw2=(LPC_GPIO1->FIOPIN>>26)&1;
 }
 void stop(){
