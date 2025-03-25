@@ -14,6 +14,7 @@ void delay(){
   read_sw2();
   if(sw2==1) stop();
 }
+}
 int main(){
   LPC_PINCON->PINSEL0=0x0; //0.4-0.11 as GPIO
   LPC_PINCON->PINSEL2=0x0; //1.26 as GPIO
