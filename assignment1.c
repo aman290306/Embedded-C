@@ -8,8 +8,6 @@ void read_sw2(){
 }
 void stop(){
   LPC_GPIO0->FIOCLR=0xFF<<4;
-  while(1){
-  }
 }
 void delay(){
   for (j=0;j<20000;j++){
@@ -28,7 +26,10 @@ while(1){
    }while(sw2==1);
    for(i=0;i<3;i++){
         read_sw2();
-        if(sw2==1) stop();
+        if(sw2==1) {
+           stop();
+           return 0;
+        }
         LPC_GPIO0->FIOCLR=1<<(4+i);
         LPC_GPIO0->FIOCLR=1<<(11-i);
         delay();
@@ -36,7 +37,10 @@ while(1){
       read_sw2();
      for(i=0;i<3;i++){
         read_sw2();
-        if(sw2==1) stop();
+        if(sw2==1){
+           stop();
+           return 0;
+        }
         LPC_GPIO0->FIOSET=1<<(8+i);
         LPC_GPIO0->FIOSET=1<<(7-i);
         delay();
