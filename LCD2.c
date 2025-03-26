@@ -83,7 +83,7 @@ int main(){
   char Msg[]="Hello Aman!";
   while(1){
   alphanum(&Msg[0]);
-  delay(200000); //start backspacing after 1s
+  delay(1000000); //start backspacing after 5s
   backspace(&Msg[0]);
   delay(200000); //start writing again after 1s
   }
