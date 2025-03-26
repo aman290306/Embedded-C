@@ -13,7 +13,7 @@ while(1){
     LPC_GPIO0->FIOSET=LED; //Set 0.4-0.11 pins high
     for(j=0;j<50000;j++); //delay
     LPC_GPIO0->FIOCLR=0xFF0; //Clear 0.4-0.11 pins
-    LED=LED|LED<<1;
+    LED=LED<<1|1;
   }
   LED=0x10;
   for(i=0;i<8;i++){
