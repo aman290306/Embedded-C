@@ -67,7 +67,7 @@ void backspace(char* s){
   
   while(len!=0){
     lcd_comdata(0x10,0); //shifts cursor to the left by 1 place 
-    lcd_comdata(' ',1); //cursor gets incremented and the letter is overwriteen by blank
+    lcd_comdata(' ',1); //cursor gets incremented and the letter is overwritten by blank
     lcd_comdata(0x10,0); //shift cursor left by 1 place again
     len--;
     delay(20000);
@@ -80,7 +80,7 @@ int main(){
   LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
   initTimer0();
-  char Msg[]={"Hello Aman!"};
+  char Msg[]="Hello Aman!";
   while(1){
   alphanum(&Msg[0]);
   delay(200000); //start backspacing after 1s
