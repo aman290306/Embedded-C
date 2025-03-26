@@ -31,8 +31,6 @@ void alphanum(char* str){
     lcd_comdata(*(str++),1);
 }
 void lcd_init(){
-  LPC_PINCON->PINSEL = 0xFC003FFF; //0.23-0.26,0.27,0.28 as GPIO
-  LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   clear_ports();
   delay_lcd(3200);
   lcd_comdata(0x33,0);
@@ -50,6 +48,8 @@ void lcd_init(){
 int main(){
   SystemInit();
   SystemCoreClockUpdate();
+  LPC_PINCON->PINSEL = 0xFC003FFF; //0.23-0.26,0.27,0.28 as GPIO
+  LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
   char Msg[]={"Hello Aman!"};
   while(1){
