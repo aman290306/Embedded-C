@@ -12,19 +12,14 @@ int main(){
   count=0;
 while(1){
   if(!(LPC_GPIO2->FIOPIN>>12 & 1)){//Switch is pressed - Down 
-    if (count == 0) count = 255;
-    LPC_GPIO0->FIOSET=count<<4;
-    for(j=0;j<50000;j++);
-    LPC_GPIO0->FIOCLR=0xFF0;
-    count --;
+    count=(count==0)?255:count-1;
+    LPC_GPIO0->FIOPIN=count<<4;
   }
   else{
-  if (count == 255) count = 0; //Switch not pressed - Up
-  LPC_GPIO0->FIOSET=count<<4;
-  for(j=0;j<50000;j++);
-  LPC_GPIO0->FIOCLR=0xFF0;
-  count ++;
+  count = (count+1)%256; //Switch not pressed - Up
+  LPC_GPIO0->FIOPIN=count<<4;
   }
+  for(j=0;j<50000;j++);
  }
 }
 //Output: Up-down Counter using 8 leds
