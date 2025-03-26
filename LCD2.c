@@ -25,7 +25,7 @@ void write(int val,int RS){
   if(RS==0) LPC_GPIO0->FIOCLR=1<<27;
   else LPC_GPIO0->FIOSET=1<<27;
   LPC_GPIO0->FIOSET=1<<28; //Enable high
-  delay_lcd(25); // generate enable high to low pulse
+  delay_lcd(200); // generate enable high to low pulse
   LPC_GPIO0->FIOCLR=1<<28; //Enable Low
 }
 void delay_lcd(unsigned int k){
@@ -43,25 +43,23 @@ void lcd_comdata(int temp ,int type){
 void alphanum(char* str){
   while(*str!='\0'){
     lcd_comdata(*(str++),1);
-    delay(20000); //1 character 1 second
+    delay(200000); //1 character 1 second
   }
 }
 void lcd_init(){
-  LPC_PINCON->PINSEL = 0xFC003FFF; //0.23-0.26,0.27,0.28 as GPIO
-  LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   clear_ports();
   lcd_comdata(0x33,0);
-  delay(1);
+  delay_lcd(500);
   lcd_comdata(0x32,0);
-  delay(1);
+  delay_lcd(500);
   lcd_comdata(0x28,0); //function set.
-  delay(1);
+  delay_lcd(500);
   lcd_comdata(0x0F,0); //display on cursor on with blink. 
-  delay(1);
+  delay_lcd(500);
   lcd_comdata(0x06,0); //entry mode set. cursor is increment mode
-  delay(1);
+  delay_lcd(500);
   lcd_comdata(0x01,0); //clear display
-  delay(40); //give 2ms
+  delay_lcd(10000); 
 }
 void backspace(char* s){
   int len=0;
@@ -69,7 +67,7 @@ void backspace(char* s){
   
   while(len!=0){
     lcd_comdata(0x10,0); //shifts cursor to the left by 1 place 
-    lcd_comdata(' ',1);// 
+    lcd_comdata(' ',1); //cursor gets incremented and the letter is overwriteen by blank
     lcd_comdata(0x10,0); //shift cursor left by 1 place again
     len--;
     delay(20000);
@@ -78,13 +76,15 @@ void backspace(char* s){
 int main(){
   SystemInit();
   SystemCoreClockUpdate();
+  LPC_PINCON->PINSEL1= 0x0; //0.23-0.26,0.27,0.28 as GPIO
+  LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
   initTimer0();
   char Msg[]={"Hello Aman!"};
   while(1){
   alphanum(&Msg[0]);
-  delay(20000); //start backspacing after 1s
+  delay(200000); //start backspacing after 1s
   backspace(&Msg[0]);
-  delay(20000); //start writing again after 1s
+  delay(200000); //start writing again after 1s
   }
 }
