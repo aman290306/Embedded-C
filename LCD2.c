@@ -3,6 +3,7 @@
   Hello Aman_
 */
 // 1ms=1000 micro s
+char Msg[]="Hello Aman!";
 void initTimer0(){
   LPC_TIM0->CTCR=0x0; //Timer mode
   LPC_TIM0->PR= 599; //TC increments every 50micro s if pclk=12Mhz
@@ -80,7 +81,6 @@ int main(){
   LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
   initTimer0();
-  char Msg[]="Hello Aman!";
   while(1){
   alphanum(&Msg[0]);
   delay(1000000); //start backspacing after 5s
