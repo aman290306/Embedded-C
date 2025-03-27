@@ -49,15 +49,15 @@ void alphanum(char* str){
 void lcd_init(){
   clear_ports();
   lcd_comdata(0x33,0);
-  delay_lcd(500);
+  delay_lcd(32000);
   lcd_comdata(0x32,0);
-  delay_lcd(500);
+  delay_lcd(32000);
   lcd_comdata(0x28,0); //function set.
-  delay_lcd(500);
+  delay_lcd(30000);
   lcd_comdata(0x0F,0); //display on cursor on with blink. 
-  delay_lcd(500);
+  delay_lcd(800);
   lcd_comdata(0x06,0); //entry mode set. cursor is increment mode
-  delay_lcd(500);
+  delay_lcd(800);
   lcd_comdata(0x01,0); //clear display
   delay_lcd(10000); 
 }
