@@ -19,12 +19,12 @@ int main(){
   LPC_PINCON->PINSEL0=0x0; //0.4-0.11 as GPIO
   LPC_PINCON->PINSEL2=0x0; //1.26 as GPIO
   LPC_GPIO0->FIODIR|= 0xFF<<4; //0.4-0.11 as output
-  LPC_GPIO1->FIODIR= 0; //1.26 as input
-  LPC_GPIO0->FIOSET=0xFF<<4;
-while(1){
+  LPC_GPIO1->FIODIR= 0; //1.26 as input 
    do{
-     read_sw2();
+     read_sw2(); // wait for user to press then start 
    }while(sw2==1);
+while(1){
+   LPC_GPIO0->FIOSET=0xFF<<4; // all leds on
    for(i=0;i<3;i++){
         read_sw2();
         if(sw2==1) {
@@ -36,7 +36,11 @@ while(1){
         delay();
       }
       read_sw2();
-     for(i=0;i<3;i++){
+      if(sw2==1){
+         stop();
+         return 0;
+      }
+     for(i=0;i<4;i++){
         read_sw2();
         if(sw2==1){
            stop();
