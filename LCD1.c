@@ -1,5 +1,7 @@
 #include<LPC17xx.h> 
 // display message
+char Msg[]="Hello Aman!";
+char Msg2[]="How are you?";
 void clear_ports(){
   LPC_GPIO0->FIOCLR=0xF<<23; //clear data lines 0.23-0.26
   LPC_GPIO0->FIOCLR=1<<27; //clear RS line 0.27
@@ -55,8 +57,6 @@ int main(){
   LPC_PINCON->PINSEL1= 0x0; //0.23-0.26,0.27,0.28 as GPIO
   LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
-  char Msg[]="Hello Aman!";
-  char Msg2[]="How are you?"
   alphanum(&Msg[0]);
   lcd_comdata(0xC0,0); //goes to first position of next line
   alphanum(Msg2);
