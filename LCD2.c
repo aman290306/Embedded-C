@@ -3,6 +3,7 @@
   Hello Aman_
 */
 // 1ms=1000 micro s
+int temp1,temp2,k1,len;
 char Msg[]="Hello Aman!";
 void initTimer0(){
   LPC_TIM0->CTCR=0x0; //Timer mode
@@ -26,33 +27,32 @@ void write(int val,int RS){
   if(RS==0) LPC_GPIO0->FIOCLR=1<<27;
   else LPC_GPIO0->FIOSET=1<<27;
   LPC_GPIO0->FIOSET=1<<28; //Enable high
-  delay_lcd(200); // generate enable high to low pulse
+  delay_lcd(25); // generate enable high to low pulse
   LPC_GPIO0->FIOCLR=1<<28; //Enable Low
 }
 void delay_lcd(unsigned int k){
-  int k1;
   for(k1=0;k1<k;k1++);
 }
 void lcd_comdata(int temp ,int type){
-  int temp1=temp & 0xF0;
+  temp1=temp & 0xF0;
   temp1=temp1<<19;
   write(temp1,type);
-  int temp2=temp & 0x0F;
+  temp2=temp & 0x0F;
   temp2=temp2<<23;
   write(temp2,type);
 }
 void alphanum(char* str){
   while(*str!='\0'){
     lcd_comdata(*(str++),1);
-    delay(200000); //1 character 1 second
+    delay(20000); //1 character 1 second
   }
 }
 void lcd_init(){
   clear_ports();
   lcd_comdata(0x33,0);
-  delay_lcd(32000);
+  delay_lcd(30000);
   lcd_comdata(0x32,0);
-  delay_lcd(32000);
+  delay_lcd(30000);
   lcd_comdata(0x28,0); //function set.
   delay_lcd(30000);
   lcd_comdata(0x0F,0); //display on cursor on with blink. 
@@ -63,7 +63,7 @@ void lcd_init(){
   delay_lcd(10000); 
 }
 void backspace(char* s){
-  int len=0;
+   len=0;
   while(s[len]!='\0') len++;
   
   while(len!=0){
@@ -83,8 +83,8 @@ int main(){
   initTimer0();
   while(1){
   alphanum(&Msg[0]);
-  delay(1000000); //start backspacing after 5s
+  delay(100000); //start backspacing after 5s
   backspace(&Msg[0]);
-  delay(200000); //start writing again after 1s
+  delay(20000); //start writing again after 1s
   }
 }
