@@ -1,5 +1,5 @@
 #include<LPC17xx.h> 
-// display 'Hello Aman!'
+// display message
 void clear_ports(){
   LPC_GPIO0->FIOCLR=0xF<<23; //clear data lines 0.23-0.26
   LPC_GPIO0->FIOCLR=1<<27; //clear RS line 0.27
@@ -38,9 +38,9 @@ void lcd_init(){
   clear_ports();
   delay_lcd(500);
   lcd_comdata(0x33,0);
-  delay_lcd(500);
+  delay_lcd(30000);
   lcd_comdata(0x32,0);
-  delay_lcd(500);
+  delay_lcd(30000);
   lcd_comdata(0x28,0); //function set.
   delay_lcd(500);
   lcd_comdata(0x0C,0); //display on cursor off. 
@@ -56,6 +56,9 @@ int main(){
   LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28; //set as output
   lcd_init();
   char Msg[]="Hello Aman!";
+  char Msg2[]="How are you?"
   alphanum(&Msg[0]);
+  lcd_comdata(0xC0,0); //goes to first position of next line
+  alphanum(Msg2);
   while(1);
 }
