@@ -43,7 +43,7 @@ void lcd_init(){
   delay_lcd(500);
   lcd_comdata(0x28,0); //function set.
   delay_lcd(500);
-  lcd_comdata(0x0F,0); //display on cursor on with blink. 
+  lcd_comdata(0x0C,0); //display on cursor off. 
   lcd_comdata(0x06,0); //entry mode set. cursor is increment mode
   delay_lcd(500);
   lcd_comdata(0x01,0); //clear display
