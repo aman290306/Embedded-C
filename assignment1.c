@@ -20,7 +20,7 @@ void delay(){
 }
 int main(){
   LPC_PINCON->PINSEL0=0x0; //0.4-0.11 as GPIO
-  LPC_PINCON->PINSEL2=0x0; //1.26 as GPIO
+  LPC_PINCON->PINSEL3=0x0; //1.26 as GPIO
   LPC_GPIO0->FIODIR|= 0xFF<<4; //0.4-0.11 as output
   LPC_GPIO1->FIODIR= 0; //1.26 as input 
    do{
