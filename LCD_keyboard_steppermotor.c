@@ -112,24 +112,20 @@ int main(){
 		read_columns();
 		
 		switch(columns){
-        case(0): //no col pressed in row 0
-            break;
+	        case(0): //no col pressed in row 0
+	            break;
 
 		case(1)://is col 0 pressed
 			alphanum(Msg0);
 			clockwise_steps(50);
 			lcd_comdata(0x01,0);//clear lcd
-		    delay(10000);
-            do {
-                read_columns();
-            } while(columns != 0);
-			break;
+		    	delay(10000);
 		
-        case(2)://is col 1 pressed
+        	case(2)://is col 1 pressed
 			alphanum(Msg1);
 			clockwise_steps(100);
 			lcd_comdata(0x01,0);//clear lcd
-	    	delay(10000);
+	    		delay(10000);
 			break;
 		
 		case(4)://is col 2 pressed
@@ -143,13 +139,13 @@ int main(){
 			alphanum(Msg3);
 			clockwise_steps(200);
 			lcd_comdata(0x01,0);//clear lcd
-	    	delay(10000);
+	    		delay(10000);
 			break;
 			
 		default: 
-		    alphanum(Msg);
-		    lcd_comdata(0x01,0);//clear lcd
-	    	delay(10000);
+			alphanum(Msg);
+			lcd_comdata(0x01,0);//clear lcd
+			delay(10000);
 			break;
 		}
 		
@@ -158,8 +154,8 @@ int main(){
 		read_columns();
 		
 		switch(columns){
-        case(0): //if no col is pressed in row 1
-            break;
+        	case(0): //if no col is pressed in row 1
+           		break;
 
 		case(1)://is col 0 pressed
 			alphanum(Msg4);
@@ -186,14 +182,14 @@ int main(){
 			alphanum(Msg7);
 			anti_clockwise_steps(200);
 			lcd_comdata(0x01,0);//clear lcd
-	    	delay(10000);
+	    		delay(10000);
 			break;
 			
 		default: 
 		    alphanum(Msg);
 		    lcd_comdata(0x01,0);//clear lcd
-	    	delay(10000);
-			break;
+	    	    delay(10000);
+		    break;
 		}
 	} //step=1.8deg
 }
