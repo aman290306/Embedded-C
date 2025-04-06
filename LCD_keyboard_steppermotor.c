@@ -1,4 +1,6 @@
-/*Stepper motor keyboard row 0. key0/4=90deg, key1/5=180deg, key2/6=270deg, key3/7=360deg row1=anticlock row0=clockwise 
+/*Stepper motor keyboard: clockwise/anticlockwise: key0/4=90deg, key1/5=180deg, key2/6=270deg, key3/7=360deg
+ row0=clockwise 
+ row1=anticlock row0=clockwise 
  display angle,dir on lcd.
 0.23-0.26 lcd data lines
 0.27 RS lcd
@@ -6,6 +8,7 @@
 0.15,0.16 rows
 0.17-0.20 cols
 1.23-1.26 stepper motor*/
+
 #include<LPC17xx.h>
 unsigned int columns,temp,temp1,temp2,k1,i;
 char Msg[]="Invalid";
@@ -88,20 +91,20 @@ void anti_clockwise_steps(int mult){
 }
 }
 void read_columns(){
-    for(i=0;i<100;i++)
-        columns=(LPC_GPIO0->FIOPIN>>17)&0xF; 
+    columns=(LPC_GPIO0->FIOPIN>>17)&0xF; 
+    delay(1000);
 }
 
 int main(){
-  SystemInit();
-  SystemCoreClockUpdate();
-  LPC_PINCON->PINSEL0=0x0;//0.15 GPIO
-  LPC_PINCON->PINSEL1= 0x0; //0.23-0.26,0.27,0.28 as GPIO //0.16 GPIO// 0.17-0.20 as GPIO
-  LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|1<<15|1<<16;
-  LPC_GPIO0->FIODIR &= ~(0xF << 17); // Set columns (0.17–0.20) as inputs
-  lcd_init();
-	LPC_PINCON->PINSEL3=0x0; //1.23-1.26 as GPIO 
-	LPC_GPIO1->FIODIR=0xF<<23; //1.23-1.26 as output stepper motor
+    SystemInit();
+    SystemCoreClockUpdate();
+    LPC_PINCON->PINSEL0=0x0;//0.15 GPIO
+    LPC_PINCON->PINSEL1= 0x0; //0.23-0.26,0.27,0.28 as GPIO //0.16 GPIO
+    LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|1<<15|1<<16;
+    LPC_GPIO0->FIODIR &= ~(0xF << 17); // Set columns (0.17–0.20) as inputs
+    lcd_init();
+    LPC_PINCON->PINSEL3=0x0; //1.23-1.26 as GPIO 
+    LPC_GPIO1->FIODIR=0xF<<23; //1.23-1.26 as output stepper motor
 	// keyboard 
 	while(1){
 		LPC_GPIO0->FIOSET=0xF<<15;//set all rows high initially
@@ -109,18 +112,24 @@ int main(){
 		read_columns();
 		
 		switch(columns){
+        case(0): //no col pressed in row 0
+            break;
+
 		case(1)://is col 0 pressed
 			alphanum(Msg0);
 			clockwise_steps(50);
 			lcd_comdata(0x01,0);//clear lcd
-		  delay(10000);
+		    delay(10000);
+            do {
+                read_columns();
+            } while(columns != 0);
 			break;
 		
-    case(2)://is col 1 pressed
+        case(2)://is col 1 pressed
 			alphanum(Msg1);
 			clockwise_steps(100);
 			lcd_comdata(0x01,0);//clear lcd
-	    delay(10000);
+	    	delay(10000);
 			break;
 		
 		case(4)://is col 2 pressed
@@ -143,25 +152,27 @@ int main(){
 	    	delay(10000);
 			break;
 		}
-		delay(1000);
 		
 		LPC_GPIO0->FIOSET=0xF<<15;//set all rows high 
 		LPC_GPIO0->FIOCLR=0x1<<16; //set row 1 low. enable row 1
 		read_columns();
 		
 		switch(columns){
+        case(0): //if no col is pressed in row 1
+            break;
+
 		case(1)://is col 0 pressed
 			alphanum(Msg4);
 			anti_clockwise_steps(50);
 			lcd_comdata(0x01,0);//clear lcd
-		  delay(10000);
+		    delay(10000);
 			break;
 		
-     case(2)://is col 1 pressed
-			 alphanum(Msg5);
-			 anti_clockwise_steps(100);
-			 lcd_comdata(0x01,0);//clear lcd
-	     delay(10000);
+        case(2)://is col 1 pressed
+			alphanum(Msg5);
+			anti_clockwise_steps(100);
+			lcd_comdata(0x01,0);//clear lcd
+	    	delay(10000);
 			break;
 		
 		case(4)://is col 2 pressed
