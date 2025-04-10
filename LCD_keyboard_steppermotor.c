@@ -5,8 +5,9 @@
 0.23-0.26 lcd data lines
 0.27 RS lcd
 0.28 Enable lcd
-0.15,0.16 rows
-0.17-0.20 cols
+0.15,0.18 cols
+0.19-0.20 rows
+COLUMNS GET THE LOWER 4PINS OF THE 8PINS SENT TO KEYBOARD
 1.23-1.26 stepper motor*/
 
 #include<LPC17xx.h>
@@ -69,6 +70,9 @@ void lcd_init(){
   delay(10000); 
 }
 void clockwise_steps(int mult){
+	if(LPC_GPIO1->FIOPIN>>23==0){
+		LPC_GPIO1->FIOSET=1<<23; // initially all rotors are off. start by turning A on.
+	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>26)&1){//if D is on, turn D off, turn A on
 		LPC_GPIO1->FIOPIN=1<<23;
@@ -77,9 +81,12 @@ void clockwise_steps(int mult){
 		LPC_GPIO1->FIOPIN=LPC_GPIO1->FIOPIN<<1;
 	}
 	delay(10000);
-}
+        }
 }
 void anti_clockwise_steps(int mult){
+	if(LPC_GPIO1->FIOPIN>>23==0){
+		LPC_GPIO1->FIOSET=1<<23; // initially all rotors are off. start by turning A on.
+	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>23)&1){//if A is on, turn A off, turn D on
 		LPC_GPIO1->FIOPIN=1<<26;
@@ -88,27 +95,27 @@ void anti_clockwise_steps(int mult){
 		LPC_GPIO1->FIOPIN=LPC_GPIO1->FIOPIN>>1;
 	}
 	delay(10000);
-}
+        }
 }
 void read_columns(){
-    columns=(LPC_GPIO0->FIOPIN>>17)&0xF; 
+    columns=(LPC_GPIO0->FIOPIN>>15)&0xF; 
     delay(1000);
 }
 
 int main(){
+	//0.15-18 cols 0.19,0.20 rows
     SystemInit();
     SystemCoreClockUpdate();
-    LPC_PINCON->PINSEL0=0x0;//0.15 GPIO
-    LPC_PINCON->PINSEL1= 0x0; //0.23-0.26,0.27,0.28 as GPIO //0.16 GPIO
-    LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|1<<15|1<<16;
-    LPC_GPIO0->FIODIR &= ~(0xF << 17); // Set columns (0.17–0.20) as inputs
+    LPC_PINCON->PINSEL0=0x0;
+    LPC_PINCON->PINSEL1= 0x0; 
+    LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|3<<19|~(0xF<<15);
     lcd_init();
     LPC_PINCON->PINSEL3=0x0; //1.23-1.26 as GPIO 
     LPC_GPIO1->FIODIR=0xF<<23; //1.23-1.26 as output stepper motor
 	// keyboard 
 	while(1){
-		LPC_GPIO0->FIOSET=0xF<<15;//set all rows high initially
-		LPC_GPIO0->FIOCLR=0x1<<15; //set row 0 low. enable row 0
+		LPC_GPIO0->FIOSET=0x3<<19;//set all rows high initially
+		LPC_GPIO0->FIOCLR=0x1<<19; //set row 0 low. enable row 0
 		read_columns();
 		
 		switch(columns){
@@ -149,8 +156,8 @@ int main(){
 			break;
 		}
 		
-		LPC_GPIO0->FIOSET=0xF<<15;//set all rows high 
-		LPC_GPIO0->FIOCLR=0x1<<16; //set row 1 low. enable row 1
+		LPC_GPIO0->FIOSET=0x3<<19;//set all rows high 
+		LPC_GPIO0->FIOCLR=0x1<<20; //set row 1 low. enable row 1
 		read_columns();
 		
 		switch(columns){
