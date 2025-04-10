@@ -108,7 +108,8 @@ int main(){
     SystemCoreClockUpdate();
     LPC_PINCON->PINSEL0=0x0;
     LPC_PINCON->PINSEL1= 0x0; 
-    LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|3<<19|~(0xF<<15);
+    LPC_GPIO0->FIODIR=0x0F<<23|1<<27|1<<28|3<<19;
+    LPC_GPIO0->FIODIR&=~(0xF<<15);
     lcd_init();
     LPC_PINCON->PINSEL3=0x0; //1.23-1.26 as GPIO 
     LPC_GPIO1->FIODIR=0xF<<23; //1.23-1.26 as output stepper motor
@@ -127,6 +128,7 @@ int main(){
 			clockwise_steps(50);
 			lcd_comdata(0x01,0);//clear lcd
 		    	delay(10000);
+			break;
 		
         	case(2)://is col 1 pressed
 			alphanum(Msg1);
