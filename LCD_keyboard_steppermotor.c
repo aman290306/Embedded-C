@@ -70,6 +70,9 @@ void lcd_init(){
   delay(10000); 
 }
 void clockwise_steps(int mult){
+	if(!((LPC_GPIO1->FIOPIN >>23)&0xF)){
+		LPC_GPIO1->FIOPIN=1<<23;
+	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>26)&1){//if D is on, turn D off, turn A on
 		LPC_GPIO1->FIOPIN=1<<23;
@@ -81,6 +84,9 @@ void clockwise_steps(int mult){
         }
 }
 void anti_clockwise_steps(int mult){
+	if(!((LPC_GPIO1->FIOPIN >>23)&0xF)){
+		LPC_GPIO1->FIOPIN=1<<23;
+	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>23)&1){//if A is on, turn A off, turn D on
 		LPC_GPIO1->FIOPIN=1<<26;
