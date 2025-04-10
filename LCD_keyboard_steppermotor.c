@@ -70,9 +70,6 @@ void lcd_init(){
   delay(10000); 
 }
 void clockwise_steps(int mult){
-	if(!((LPC_GPIO1->FIOPIN >>23)&0xF)){
-		LPC_GPIO1->FIOPIN=1<<23;
-	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>26)&1){//if D is on, turn D off, turn A on
 		LPC_GPIO1->FIOPIN=1<<23;
@@ -84,9 +81,6 @@ void clockwise_steps(int mult){
         }
 }
 void anti_clockwise_steps(int mult){
-	if(!((LPC_GPIO1->FIOPIN >>23)&0xF)){
-		LPC_GPIO1->FIOPIN=1<<23;
-	}
 	for(i=0;i<mult;i++){
 	if((LPC_GPIO1->FIOPIN>>23)&1){//if A is on, turn A off, turn D on
 		LPC_GPIO1->FIOPIN=1<<26;
@@ -113,7 +107,7 @@ int main(){
     lcd_init();
     LPC_PINCON->PINSEL3=0x0; //1.23-1.26 as GPIO 
     LPC_GPIO1->FIODIR=0xF<<23; //1.23-1.26 as output stepper motor
-LPC_GPIO1->FIODIR=1<<23; turn on one stator
+    LPC_GPIO1->FIOSET=1<<23; // initial state of motor
 	// keyboard 
 	while(1){
 		LPC_GPIO0->FIOSET=0x3<<19;//set all rows high initially
