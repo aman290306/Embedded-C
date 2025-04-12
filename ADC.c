@@ -2,8 +2,6 @@
 #include<LPC17xx.h>
 #include<stdio.h>
 /*include lcd functions*/
-#define Ref_Vtg 3.300
-#define Full_scale 0xFFF
 int main(){
   unsigned int i;
   unsigned long adc_temp;
@@ -26,11 +24,8 @@ int main(){
 while(1){
   LPC_ADC->ADCR=(1<<5)|(1<<21)|(1<<24);
   while(!(LPC_ADC->ADDR5 & 0x80000000));
-  adc_temp=LPC_ADC->ADDR5;
-  adc_temp>>=4;
-  adc_temp&=0xFFF;
-
-  in_vtg=(((float)adc_temp*(float)Ref_Vtg)/(float)Full_Scale);
+  adc_temp=(LPC_ADC->ADDR5>>4)&0xFFF;
+  in_vtg=(float) ((adc_temp*3.300)/4096);
   sprintf(dval,"%lu",adc_temp);
   for(i=0;i<2000;i++);
   lcd_comdata(0x89,0);
