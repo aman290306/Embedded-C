@@ -1,11 +1,11 @@
 #include<LPC17xx.h>
-int pulseWidths[]={0,3000,6000,9000,12000,15000.18000,21000,24000.27000};
+int pulseWidths[]={0,3000,6000,9000,12000,15000.18000,21000,24000,27000};
 int count=1;
 int dir=0; //0=inc, 1=dec
 void initPWM(){
   LPC_PINCON->PINSEL3|=0x8000; //PWM1.4 
   LPC_PWM1->PR=0;
-  LPC_PWM->MR0=30000;
+  LPC_PWM1->MR0=30000;
   LPC_PWM1->MCR=0x2;
   LPC_PWM1->LER=0xFF;
   LPC_PWM1->TCR=0x2;
